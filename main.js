@@ -21,6 +21,15 @@ pointLight.position.set(5, 5, 5);
 const ambientLight = new THREE.AmbientLight(0xffcc00, 0.3); // Ambient light in yellow
 scene.add(pointLight, ambientLight);
 
+// Dynamic Material for Glow Effect
+const glowMaterial = new THREE.MeshBasicMaterial({
+  color: 0x4b0082, // Dark purple color
+  emissive: 0x7f00ff, // Glowing purple
+  emissiveIntensity: 1,
+  wireframe: true,
+});
+
+
 // Create starfield background (Sun-themed)
 function createStarField() {
   const geometry = new THREE.BufferGeometry();
@@ -29,6 +38,8 @@ function createStarField() {
     size: 0.1,
     sizeAttenuation: true,
   });
+
+
 
   const stars = [];
   for (let i = 0; i < 10000; i++) {
@@ -55,8 +66,8 @@ function createTunnel() {
   const material = new THREE.MeshBasicMaterial({
     color: 0xff6600,  // Orange color for the tunnel
     wireframe: true,
-    emissive: 0xff6600,  // Glowing orange effect
-    emissiveIntensity: 0.3,
+    emissive: 0x7f00ff,  // Glowing orange effect
+    emissiveIntensity: 1,
   });
   const tunnel = new THREE.Mesh(geometry, material);
   tunnel.rotation.x = Math.PI / 2;
@@ -76,7 +87,7 @@ function createFloatingSymbol(text, position) {
 
   // Draw text in sun-related color
   context.font = '48px Arial';
-  context.fillStyle = '#ffcc00';  // Bright yellow
+  context.fillStyle = '#911919';  // Bright yellow
   context.textAlign = 'center';
   context.textBaseline = 'middle';
   context.fillText(text, 128, 128);
@@ -115,14 +126,28 @@ function animateSymbols() {
 }
 
 // Create a torus geometry with sun-like colors
-const torusGeometry = new THREE.TorusGeometry(8, 2, 16, 100);
+const torusGeometry = new THREE.SphereGeometry(10, 11, 12);
 const torusMaterial = new THREE.MeshStandardMaterial({
   color: 0xff6347,  // Light red-orange
   emissive: 0xff6347, // Glowing light red
-  emissiveIntensity: 0.5,
+  emissiveIntensity: 1,
+  wireframe: true,
 });
 const torus = new THREE.Mesh(torusGeometry, torusMaterial);
 scene.add(torus);
+
+// **Add Solar Flare Effect: Using Bloom and Emissive Materials**
+const flareGeometry = new THREE.SphereGeometry(50, 32, 32);
+const flareMaterial = new THREE.MeshBasicMaterial({
+  color: 0xff6600,  // Solar flare color (sun-orange)
+  emissive: 0xff6600,  // Glowing
+  emissiveIntensity: 1.5,  // Intensity of the flare
+  transparent: true,
+  opacity: 0.6,
+});
+const flare = new THREE.Mesh(flareGeometry, flareMaterial);
+flare.position.set(5, 5, 5);
+scene.add(flare);
 
 // Scroll Animation
 function moveCamera() {
